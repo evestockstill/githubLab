@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import styles from './User.css';
 
 const User = ({ name, followers, following, html_url, bio, avatar_url }) => (
-  <article className={styles.user}>
+  <article key={name} className={styles.user}>
     <h2 className={styles.username}>{name}</h2>
     <p>{followers}</p>
     <p>{following}</p>
@@ -12,5 +12,14 @@ const User = ({ name, followers, following, html_url, bio, avatar_url }) => (
     <img src={avatar_url}></img>
   </article>
 );
+
+User.propTypes = {
+  name: PropTypes.string.isRequired,
+  followers: PropTypes.string.isRequired,
+  following: PropTypes.string.isRequired,
+  html_url: PropTypes.string.isRequired,
+  bio: PropTypes.string.isRequired,
+  avatar_url: PropTypes.string.isRequired
+};
 
 export default User;
