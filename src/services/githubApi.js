@@ -7,5 +7,6 @@ const request = username => {
       return json;
     });
 };
+
 export const getUsername = (username) => request(username);
 // export const getUserRepo = repos => request(`/username${repos}`);

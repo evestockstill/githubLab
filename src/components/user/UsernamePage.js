@@ -1,32 +1,49 @@
-import React, { useEffect } from 'react';
+import React, { useState } from 'react';
 import Loading from '../Loading';
 import User from './User';
-import { useSelector, useDispatch } from 'react-redux';
-import { fetchUsername } from '../../action/userAction';
-import { getUsername, isLoadingUsername } from '../../selector/userSelector';
-import SearchBar from '../search/SearchBar';
+// import { useSelector, useDispatch } from 'react-redux';
+// import { fetchUsername } from '../../action/userAction';
+import { getUsername } from '../../services/githubApi';
+// import { getUsername, isLoadingUsername } from '../../selector/userSelector';
 
 const UsernamePage = () => {
-  const dispatch = useDispatch();
-  const loading = useSelector(isLoadingUsername);
-  const username = useSelector(getUsername);
+  const [loading, setLoading] = useState(false);
+  const [user, setUser] = useState(null);
+  const [username, setUsername] = useState('');
 
-  useEffect(() => {
-    dispatch(fetchUsername());
-  }, []);
+  const populateUser = () => {
+    setLoading(true);
+    getUsername(username)
+      .then(user => {
+        setUser(user);
+        setLoading(false);
+      })
+      .catch(err => {
+        setLoading(false);
+        // Show(err)
+        console.log(err);
+      });
+  };
 
-  if(loading) return <Loading />;
+  const handleClick = e => {
+    e.preventDefault();
+    populateUser();
+  };
 
-  const usernameElements = username.map(user => (
-    <li key={user.username}>
-      <User {...user} />
-    </li>
-  ));
-
-  return (
+  // name, followers, following, html_url, bio, avatar_url
+  return loading ? (
+    <Loading />
+  ) : (
     <>
-      <SearchBar />
-      <ul>{usernameElements}</ul>
+      <form onSubmit={handleClick}>
+        <input
+          type='text'
+          value={username}
+          onChange={({ target }) => setUsername(target.value)}
+        />
+        <button>Search</button>
+      </form>
+      {user ? <User user={user} /> : null}
     </>
   );
 };
