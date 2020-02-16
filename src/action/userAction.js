@@ -1,13 +1,34 @@
 import { getUsername } from '../services/githubApi';
 
-export const FETCH_USERNAME_LOADING = 'FETCH_USERNAME_LOADING';
-export const FETCH_USERNAME = 'FETCH_USERNAME';
-export const fetchUsername = (username) => dispatch => {
-  dispatch({ type: FETCH_USERNAME_LOADING });
-  return getUsername(username).then(username =>
-    dispatch({
-      type: FETCH_USERNAME,
-      payload: username
-    })
-  );
+export const START_LOADING = 'START_LOADING';
+export const STOP_LOADING = 'STOP_LOADING';
+export const SET_USER_DATA = 'SET_USER_DATA';
+
+const startLoading = () => ({
+  type: START_LOADING
+});
+
+const stopLoading = () => ({
+  type: STOP_LOADING
+});
+
+const setUserData = userData => ({
+  type: SET_USER_DATA,
+  payload: userData
+});
+
+export const fetchUsername = username => {
+  return dispatch => {
+    dispatch(startLoading());
+
+    // Call API
+    // do something success
+    // do something error
+    getUsername(username)
+      .then(userData => {
+        dispatch(setUserData(userData));
+        dispatch(stopLoading());
+      })
+      .then(err => console.log('ERROR HERE:', err));
+  };
 };

@@ -1,16 +1,22 @@
-import { FETCH_USERNAME, FETCH_USERNAME_LOADING } from '../action/userAction';
+import {
+  SET_USER_DATA,
+  START_LOADING,
+  STOP_LOADING
+} from '../action/userAction';
 
 const initialState = {
-  username: null,
-  loading: true
+  user: null,
+  loading: false
 };
 
 export default function reducer(state = initialState, action) {
   switch(action.type) {
-    case FETCH_USERNAME_LOADING:
+    case START_LOADING:
       return { ...state, loading: true };
-    case FETCH_USERNAME:
-      return { ...state, loading: false, username: action.payload };
+    case STOP_LOADING:
+      return { ...state, loading: false };
+    case SET_USER_DATA:
+      return { ...state, user: action.payload };
     default:
       return state;
   }

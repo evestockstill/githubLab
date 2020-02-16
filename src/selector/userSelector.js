@@ -1,2 +1,3 @@
-export const isLoadingUsername = state => state.username.loading;
-export const getUsername = state => state.username.username;
+export const isLoading = state => state.loading;
+export const getUsername = state => state.username;
+export const getUser = state => state.user;

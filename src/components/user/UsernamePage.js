@@ -1,36 +1,22 @@
 import React, { useState } from 'react';
 import Loading from '../Loading';
 import User from './User';
-// import { useSelector, useDispatch } from 'react-redux';
-// import { fetchUsername } from '../../action/userAction';
-import { getUsername } from '../../services/githubApi';
-// import { getUsername, isLoadingUsername } from '../../selector/userSelector';
+import { useSelector, useDispatch } from 'react-redux';
+import { isLoading, getUser } from '../../selector/userSelector';
+import { fetchUsername } from '../../action/userAction';
 
 const UsernamePage = () => {
-  const [loading, setLoading] = useState(false);
-  const [user, setUser] = useState(null);
-  const [username, setUsername] = useState('');
+  const loading = useSelector(isLoading);
+  const user = useSelector(getUser);
+  const dispatch = useDispatch();
 
-  const populateUser = () => {
-    setLoading(true);
-    getUsername(username)
-      .then(user => {
-        setUser(user);
-        setLoading(false);
-      })
-      .catch(err => {
-        setLoading(false);
-        // Show(err)
-        console.log(err);
-      });
-  };
+  const [username, setUsername] = useState('');
 
   const handleClick = e => {
     e.preventDefault();
-    populateUser();
+    dispatch(fetchUsername(username));
   };
 
-  // name, followers, following, html_url, bio, avatar_url
   return loading ? (
     <Loading />
   ) : (
